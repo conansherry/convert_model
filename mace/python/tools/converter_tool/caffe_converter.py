@@ -119,7 +119,7 @@ class CaffeNet(object):
         layer.bottom[:] = [self._alias_op_output_name.get(layer_input,
                                                           layer_input) for
                            layer_input in layer.bottom][:]
-        for i in xrange(len(layer.top)):
+        for i in range(len(layer.top)):
             old_name = layer.top[i]
             if layer.type == 'Input':
                 new_name = old_name
@@ -218,7 +218,7 @@ class CaffeConverter(base_converter.ConverterInterface):
     @staticmethod
     def replace_input_name(ops, src_name, dst_name):
         for op in ops:
-            for i in xrange(len(op.input)):
+            for i in range(len(op.input)):
                 if op.input[i] == src_name:
                     op.input[i] = dst_name
 
@@ -235,7 +235,7 @@ class CaffeConverter(base_converter.ConverterInterface):
         ops.reverse()
         visited = set()
         for op in ops:
-            for i in xrange(len(op.output)):
+            for i in range(len(op.output)):
                 original_output_name = op.output[i].split('#')[0]
                 if original_output_name not in visited:
                     self.replace_input_name(
