@@ -597,8 +597,8 @@ def convert_model(configs):
         # sh.rm("-rf", os.path.join(BUILD_OUTPUT_DIR, library_name))
         shutil.rmtree(os.path.join(BUILD_OUTPUT_DIR, library_name))
     os.mkdir(os.path.join(BUILD_OUTPUT_DIR, library_name))
-    if not os.path.exists(BUILD_DOWNLOADS_DIR):
-        os.mkdir(BUILD_DOWNLOADS_DIR)
+    # if not os.path.exists(BUILD_DOWNLOADS_DIR):
+    #     os.mkdir(BUILD_DOWNLOADS_DIR)
 
     model_output_dir = \
         '%s/%s/%s' % (BUILD_OUTPUT_DIR, library_name, MODEL_OUTPUT_DIR_NAME)
@@ -613,8 +613,9 @@ def convert_model(configs):
         # sh.rm("-rf", model_header_dir)
         shutil.rmtree(model_header_dir)
 
-    embed_model_data = \
-        configs[YAMLKeyword.model_data_format] == ModelFormat.code
+    embed_model_data = configs[YAMLKeyword.model_data_format] == ModelFormat.code
+    if embed_model_data:
+        mace_check(False, ModuleName.YAML_CONFIG, "only model_data_format = file support")
 
     if os.path.exists(MODEL_CODEGEN_DIR):
         # sh.rm("-rf", MODEL_CODEGEN_DIR)
@@ -661,20 +662,12 @@ def convert_model(configs):
             data_type,
             ",".join(model_config.get(YAMLKeyword.graph_optimize_options, [])))
 
-        # if configs[YAMLKeyword.model_graph_format] == ModelFormat.file:
-        #     sh.mv("-f",
-        #           '%s/%s.pb' % (model_codegen_dir, model_name),
-        #           model_output_dir)
-        #     sh.mv("-f",
-        #           '%s/%s.data' % (model_codegen_dir, model_name),
-        #           model_output_dir)
-        # else:
-        #     if not embed_model_data:
-        #         sh.mv("-f",
-        #               '%s/%s.data' % (model_codegen_dir, model_name),
-        #               model_output_dir)
-        #     sh.cp("-f", glob.glob("mace/codegen/models/*/*.h"),
-        #           model_header_dir)
+        if configs[YAMLKeyword.model_graph_format] == ModelFormat.file:
+            shutil.move('%s/%s.pb_txt' % (model_codegen_dir, model_name), model_output_dir)
+            shutil.move('%s/%s.pb' % (model_codegen_dir, model_name), model_output_dir)
+            shutil.move('%s/%s.data' % (model_codegen_dir, model_name), model_output_dir)
+        else:
+            mace_check(False, ModuleName.YAML_CONFIG, "only model_graph_format = file support")
 
         MaceLogger.summary(
             StringFormatter.block("Model %s converted" % model_name))

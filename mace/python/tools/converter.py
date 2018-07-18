@@ -107,7 +107,7 @@ def mace_convert_model(platform,
                   (weight_checksum, weight_checksum_in))
             sys.exit(-1)
 
-    if platform not in ['tensorflow', 'caffe']:
+    if platform not in ['caffe']:
         print("platform %s is not supported." % platform)
         sys.exit(-1)
     if runtime not in ['cpu', 'gpu', 'dsp', 'cpu+gpu']:
