@@ -637,7 +637,7 @@ class Transformer(base_converter.ConverterInterface):
                         and len(self._consumers.get(conv_op.output[0], [])) == 1:  # noqa
                     b2s_op = self._consumers.get(conv_op.output[0])[0]
                     if b2s_op.type == MaceOp.BatchToSpaceND.name:
-                        print("Flatten atrous convolution")
+                        print "Flatten atrous convolution"
                         # Add args.
                         padding_arg_values = ConverterUtil.get_arg(
                             op,
@@ -934,12 +934,12 @@ class Transformer(base_converter.ConverterInterface):
             if op.type == MaceOp.FullyConnected.name:
                 weight = self._consts[op.input[1]]
                 if len(weight.dims) == 2:
-                input_op = self._producer[op.input[0]]
-                input_shape = list(input_op.output_shape[0].dims)
-                input_data_format = ConverterUtil.data_format(input_op)
-                weight.dims[:] = [weight.dims[0]] + input_shape[1:]
-                if input_data_format == DataFormat.NHWC:
-                    self.transpose_shape(weight.dims, [0, 3, 1, 2])
+                    input_op = self._producer[op.input[0]]
+                    input_shape = list(input_op.output_shape[0].dims)
+                    input_data_format = ConverterUtil.data_format(input_op)
+                    weight.dims[:] = [weight.dims[0]] + input_shape[1:]
+                    if input_data_format == DataFormat.NHWC:
+                        self.transpose_shape(weight.dims, [0, 3, 1, 2])
 
         return False
 
@@ -1116,7 +1116,7 @@ class Transformer(base_converter.ConverterInterface):
             if op.type == MaceOp.MatMul.name and \
                     filter_format == FilterFormat.HWIO:
                 producer = self._producer[op.input[0]]
-                        weight = self._consts[op.input[1]]
+                weight = self._consts[op.input[1]]
                 if len(weight.dims) == 2 \
                     and producer.type == MaceOp.Reshape.name \
                     and len(producer.output) == 1 \
@@ -1129,9 +1129,9 @@ class Transformer(base_converter.ConverterInterface):
                                           remove_input_tensor=True)
                     if feature_size == producer.output_shape[0].dims[1]:
                         print 'convert reshape and matmul to fc'
-                            op.type = MaceOp.FullyConnected.name
-                            weight_data = np.array(weight.float_data).reshape(
-                                weight.dims)
+                        op.type = MaceOp.FullyConnected.name
+                        weight_data = np.array(weight.float_data).reshape(
+                            weight.dims)
                         weight.dims[:] = input_shape[1:] + \
                             [weight_data.shape[1]]
                         return True
