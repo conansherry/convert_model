@@ -1,3 +1,17 @@
+# Copyright 2018 Xiaomi, Inc.  All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 import argparse
 import glob
 import hashlib
@@ -18,7 +32,13 @@ from common import MaceLogger
 from common import StringFormatter
 
 from mace.python.tools.converter import mace_convert_model
-
+################################
+# set environment
+################################
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+################################
+# common definitions
+################################
 BUILD_OUTPUT_DIR = 'builds'
 BUILD_DOWNLOADS_DIR = BUILD_OUTPUT_DIR + '/downloads'
 PHONE_DATA_DIR = "/data/local/tmp/mace_run"
@@ -95,6 +115,7 @@ RuntimeTypeStrs = [
     "dsp",
     "cpu+gpu"
 ]
+
 
 class RuntimeType(object):
     cpu = 'cpu'
