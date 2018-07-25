@@ -84,6 +84,7 @@ MaceSupportedOps = [
     'Deconv2D',
     'DepthToSpace',
     'DepthwiseConv2d',
+    'DepthwiseDeconv2d',
     'Dequantize',
     'Eltwise',
     'FoldedBatchNorm',

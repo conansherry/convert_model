@@ -891,7 +891,8 @@ class Transformer(base_converter.ConverterInterface):
             for op in net.op:
                 if op.type == MaceOp.Conv2D.name \
                         or op.type == MaceOp.Deconv2D.name \
-                        or op.type == MaceOp.DepthwiseConv2d.name:
+                        or op.type == MaceOp.DepthwiseConv2d.name \
+                        or op.type == MaceOp.DepthwiseDeconv2d.name:
                     filter = self._consts[op.input[1]]
                     filter_data = np.array(filter.float_data).reshape(
                         filter.dims)
@@ -917,7 +918,8 @@ class Transformer(base_converter.ConverterInterface):
 
             self.set_filter_format(FilterFormat.OIHW)
         for op in net.op:
-            if op.type == MaceOp.Deconv2D.name:
+            if op.type == MaceOp.Deconv2D.name \
+                    or op.type == MaceOp.DepthwiseDeconv2d.name:
                 filter = self._consts[op.input[1]]
                 filter_data = np.array(filter.float_data).reshape(
                     filter.dims)
@@ -978,7 +980,8 @@ class Transformer(base_converter.ConverterInterface):
         net = self._model
         for op in net.op:
             if op.type == MaceOp.Conv2D.name \
-                    or op.type == MaceOp.Deconv2D.name:
+                    or op.type == MaceOp.Deconv2D.name \
+                    or op.type == MaceOp.DepthwiseDeconv2d.name:
                 self.buffer_to_image(op, 1, OpenCLBufferType.CONV2D_FILTER)
                 if len(op.input) >= 3:
                     self.buffer_to_image(op, 2, OpenCLBufferType.ARGUMENT)
